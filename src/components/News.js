@@ -4,19 +4,21 @@ import Spinner from "./Spinner";
 import PropTypes from "prop-types";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-const News = ({ pageSize = 8, category = "general", setProgress, apiKey }) => {
+const News = ({ pageSize = 8, category = "general", setProgress }) => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
 
+  // Capitalize the first letter of the category name
   const capitalizeFirstLetter = (string) =>
     string.charAt(0).toUpperCase() + string.slice(1);
 
+  // Fetch and update the news
   const updateNews = async () => {
     try {
       setProgress(10);
-      const url = `https://newsapi.org/v2/top-headlines?category=${category}&apiKey=${apiKey}&page=${page}&pageSize=${pageSize}`;
+      const url = `https://newsapi.org/v2/top-headlines?category=${category}&apiKey=${process.env.REACT_APP_NEWS_API}&page=${page}&pageSize=${pageSize}`;
       const response = await fetch(url);
       setProgress(30);
       const parsedData = await response.json();
@@ -39,18 +41,20 @@ const News = ({ pageSize = 8, category = "general", setProgress, apiKey }) => {
     }
   };
 
+  // Update news when category or pageSize changes
   useEffect(() => {
     document.title = `NewsBubble - ${capitalizeFirstLetter(category)} Headlines`;
     updateNews();
     // eslint-disable-next-line
   }, [category, pageSize]);
 
+  // Fetch more data for InfiniteScroll
   const fetchMoreData = async () => {
     const newPage = page + 1;
     setPage(newPage);
 
     try {
-      const url = `https://newsapi.org/v2/top-headlines?category=${category}&apiKey=${apiKey}&page=${newPage}&pageSize=${pageSize}`;
+      const url = `https://newsapi.org/v2/top-headlines?category=${category}&apiKey=${process.env.REACT_APP_NEWS_API}&page=${newPage}&pageSize=${pageSize}`;
       const response = await fetch(url);
       const parsedData = await response.json();
 
@@ -104,15 +108,6 @@ News.propTypes = {
   pageSize: PropTypes.number,
   category: PropTypes.string,
   setProgress: PropTypes.func.isRequired,
-  apiKey: PropTypes.string.isRequired,
 };
 
 export default News;
-
-
-
-
-
-
-
-
