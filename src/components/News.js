@@ -18,7 +18,7 @@ const News = ({ pageSize = 8, category = "general", setProgress }) => {
   const updateNews = async () => {
     try {
       setProgress(10);
-      const url = `https://newsapi.org/v2/top-headlines?category=${category}&apiKey=${process.env.REACT_APP_NEWS_API}&page=${page}&pageSize=${pageSize}`;
+      const url = `/v2/top-headlines?category=${category}&apiKey=${process.env.REACT_APP_NEWS_API}&page=${page}&pageSize=${pageSize}`;
       const response = await fetch(url);
       setProgress(30);
       const parsedData = await response.json();
@@ -54,7 +54,7 @@ const News = ({ pageSize = 8, category = "general", setProgress }) => {
     setPage(newPage);
 
     try {
-      const url = `https://newsapi.org/v2/top-headlines?category=${category}&apiKey=${process.env.REACT_APP_NEWS_API}&page=${newPage}&pageSize=${pageSize}`;
+      const url = `/v2/top-headlines?category=${category}&apiKey=${process.env.REACT_APP_NEWS_API}&page=${newPage}&pageSize=${pageSize}`;
       const response = await fetch(url);
       const parsedData = await response.json();
 
