@@ -14,16 +14,22 @@ const News = ({ pageSize = 8, category = "general", setProgress }) => {
   const capitalizeFirstLetter = (string) =>
     string.charAt(0).toUpperCase() + string.slice(1);
 
-  // Fetch and update the news
+  //  update the news
   const updateNews = async () => {
     try {
       setProgress(10);
-      const url = `/v2/top-headlines?category=${category}&apiKey=${process.env.REACT_APP_NEWS_API}&page=${page}&pageSize=${pageSize}`;
+  
+      const baseUrl =
+        process.env.NODE_ENV === "production"
+          ? "https://newsapi.org/v2/top-headlines"
+          : "/v2/top-headlines";
+  
+      const url = `${baseUrl}?category=${category}&apiKey=${process.env.REACT_APP_NEWS_API}&page=${page}&pageSize=${pageSize}`;
       const response = await fetch(url);
       setProgress(30);
       const parsedData = await response.json();
       setProgress(70);
-
+  
       if (parsedData?.articles) {
         setArticles(parsedData.articles);
         setTotalResults(parsedData.totalResults);
@@ -31,7 +37,7 @@ const News = ({ pageSize = 8, category = "general", setProgress }) => {
         setArticles([]);
         setTotalResults(0);
       }
-
+  
       setLoading(false);
       setProgress(100);
     } catch (error) {
@@ -40,6 +46,7 @@ const News = ({ pageSize = 8, category = "general", setProgress }) => {
       setProgress(100);
     }
   };
+  
 
   // Update news when category or pageSize changes
   useEffect(() => {
@@ -48,7 +55,7 @@ const News = ({ pageSize = 8, category = "general", setProgress }) => {
     // eslint-disable-next-line
   }, [category, pageSize]);
 
-  // Fetch more data for InfiniteScroll
+  // Fetching more data for InfiniteScroll
   const fetchMoreData = async () => {
     const newPage = page + 1;
     setPage(newPage);
