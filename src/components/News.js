@@ -14,30 +14,25 @@ const News = ({ pageSize = 8, category = "general", setProgress }) => {
   const capitalizeFirstLetter = (string) =>
     string.charAt(0).toUpperCase() + string.slice(1);
 
-  //  update the news
+  // Update the news
   const updateNews = async () => {
     try {
       setProgress(10);
-  
-      const baseUrl =
-        process.env.NODE_ENV === "production"
-          ? "https://newsapi.org/v2/top-headlines"
-          : "/v2/top-headlines";
-  
+
+      const baseUrl = "https://newsapi.org/v2/top-headlines"; 
+
       const url = `${baseUrl}?category=${category}&apiKey=${process.env.REACT_APP_NEWS_API}&page=${page}&pageSize=${pageSize}`;
+      
       const response = await fetch(url);
       setProgress(30);
+
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
       const parsedData = await response.json();
       setProgress(70);
-  
-      if (parsedData?.articles) {
-        setArticles(parsedData.articles);
-        setTotalResults(parsedData.totalResults);
-      } else {
-        setArticles([]);
-        setTotalResults(0);
-      }
-  
+
+      setArticles(parsedData.articles || []);
+      setTotalResults(parsedData.totalResults || 0);
       setLoading(false);
       setProgress(100);
     } catch (error) {
@@ -46,30 +41,26 @@ const News = ({ pageSize = 8, category = "general", setProgress }) => {
       setProgress(100);
     }
   };
-  
 
-  // Update news when category or pageSize changes
+  // Update news
   useEffect(() => {
     document.title = `NewsBubble - ${capitalizeFirstLetter(category)} Headlines`;
     updateNews();
     // eslint-disable-next-line
   }, [category, pageSize]);
 
-  // Fetching more data 
+  // Fetching more data
   const fetchMoreData = async () => {
     const newPage = page + 1;
     setPage(newPage);
 
     try {
-      const baseUrl =
-        process.env.NODE_ENV === "production"
-          ? "https://newsapi.org/v2/top-headlines"
-          : "/v2/top-headlines";
-  
+      const baseUrl = "https://newsapi.org/v2/top-headlines"; 
+
       const url = `${baseUrl}?category=${category}&apiKey=${process.env.REACT_APP_NEWS_API}&page=${newPage}&pageSize=${pageSize}`;
       const response = await fetch(url);
       const parsedData = await response.json();
-  
+
       if (parsedData?.articles) {
         setArticles((prevArticles) => [...prevArticles, ...parsedData.articles]);
       }
@@ -115,7 +106,7 @@ const News = ({ pageSize = 8, category = "general", setProgress }) => {
   );
 };
 
-// PropTypes 
+// PropTypes
 News.propTypes = {
   pageSize: PropTypes.number,
   category: PropTypes.string,
