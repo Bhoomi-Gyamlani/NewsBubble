@@ -55,16 +55,21 @@ const News = ({ pageSize = 8, category = "general", setProgress }) => {
     // eslint-disable-next-line
   }, [category, pageSize]);
 
-  // Fetching more data for InfiniteScroll
+  // Fetching more data 
   const fetchMoreData = async () => {
     const newPage = page + 1;
     setPage(newPage);
 
     try {
-      const url = `/v2/top-headlines?category=${category}&apiKey=${process.env.REACT_APP_NEWS_API}&page=${newPage}&pageSize=${pageSize}`;
+      const baseUrl =
+        process.env.NODE_ENV === "production"
+          ? "https://newsapi.org/v2/top-headlines"
+          : "/v2/top-headlines";
+  
+      const url = `${baseUrl}?category=${category}&apiKey=${process.env.REACT_APP_NEWS_API}&page=${newPage}&pageSize=${pageSize}`;
       const response = await fetch(url);
       const parsedData = await response.json();
-
+  
       if (parsedData?.articles) {
         setArticles((prevArticles) => [...prevArticles, ...parsedData.articles]);
       }
