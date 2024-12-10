@@ -14,7 +14,6 @@ const News = ({ pageSize = 5, category = "general" }) => {
 
   const fetchNews = async (isInitialLoad = false) => {
     try {
-      console.log('API Key:', process.env.REACT_APP_NEWS_API);
       setLoading(true);
       const baseUrl = "https://newsapi.org/v2/top-headlines";
       const url = `${baseUrl}?category=${category}&apiKey=${process.env.REACT_APP_NEWS_API}&page=${page}&pageSize=${pageSize}`;

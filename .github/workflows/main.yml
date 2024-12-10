@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 name: Build and Deploy React App
 
 on:
@@ -29,3 +30,36 @@ jobs:
 
       - name: Deploy the app (optional step)
         run: npm run deploy  # Replace with your deploy command (like GitHub Pages, Netlify, etc.)
+=======
+name: Build and Deploy React App
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu environment
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  # Checkout the repository code
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'  # Set the Node.js version you are using
+
+      - name: Install dependencies
+        run: npm install  # Install the required npm dependencies
+
+      - name: Set up environment variable for API key
+        run: echo "REACT_APP_NEWS_API=${{ secrets.REACT_APP_NEWS_API }}" >> .env  # Inject API key from GitHub secrets into .env
+
+      - name: Build the app
+        run: npm run build  # Build the React app
+
+      - name: Deploy the app (optional step)
+        run: npm run deploy  # Replace with your deploy command (like GitHub Pages, Netlify, etc.)
+>>>>>>> 8bf8317b5901444b421037852a6695da6e69e694
