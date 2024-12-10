@@ -14,12 +14,13 @@ const News = ({ pageSize = 5, category = "general" }) => {
 
   const fetchNews = async (isInitialLoad = false) => {
     try {
+      console.log('API Key:', process.env.REACT_APP_NEWS_API);
       setLoading(true);
       const baseUrl = "https://newsapi.org/v2/top-headlines";
       const url = `${baseUrl}?category=${category}&apiKey=${process.env.REACT_APP_NEWS_API}&page=${page}&pageSize=${pageSize}`;
       
       let retries = 3;
-      let backoff = 1000; // Start with a 1-second backoff
+      let backoff = 1000; 
       let response;
 
       while (retries > 0) {
@@ -28,7 +29,7 @@ const News = ({ pageSize = 5, category = "general" }) => {
           break;
         } else if (response.status === 429) {
           console.warn("Rate limit hit. Retrying...");
-          await delay(backoff); // Exponential backoff
+          await delay(backoff); 
           backoff *= 2;
           retries--;
         } else {
@@ -52,8 +53,9 @@ const News = ({ pageSize = 5, category = "general" }) => {
 
   useEffect(() => {
     setPage(1); // Reset page when category changes
-    fetchNews(true); // Fetch initial news
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchNews(true); 
+
+    // eslint-disable-next-line 
   }, [category]);
 
   const fetchMoreData = () => {
