@@ -16,7 +16,8 @@ const News = ({ pageSize = 5, category = "general" }) => {
     try {
       setLoading(true);
       const baseUrl = "https://newsapi.org/v2/top-headlines";
-      const url = `${baseUrl}?category=${category}&apiKey=${process.env.REACT_APP_NEWS_API}&page=${page}&pageSize=${pageSize}`;
+       const apiKey = "0e8251ecef7c4d20a82436eb7d306b4e"
+       const url = `${baseUrl}?category=${category}&apiKey=${apiKey}&page=${page}&pageSize=${pageSize}`;
       
       let retries = 3;
       let backoff = 1000; 
