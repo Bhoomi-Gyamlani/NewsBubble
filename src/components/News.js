@@ -52,7 +52,7 @@ const News = ({ pageSize = 5, category = "general" }) => {
   };
 
   useEffect(() => {
-    setPage(1); // Reset page when category changes
+    setPage(1); 
     fetchNews(true); 
 
     // eslint-disable-next-line 
